@@ -49,7 +49,7 @@ def video_validation(message):
         bot.reply_to(message, 'فایل شما باید حجمش کمتر از 300 مگ باشد')
     else:
         # if users active downloads bigger than 3, its return the False
-        if check_user_downloads(str(chat_id)):
+        if not (ms := check_user_downloads(str(chat_id), id)):
             try:
                 # get file list
                 Files = requests.get(url="http://127.0.0.1:8000/bot/Commends/files/")
@@ -72,15 +72,83 @@ def video_validation(message):
                     if response.status_code == "200":
                         bot.reply_to(message, 'به لیست دانلود اضافه شد !!!')
             except:
-                bot.reply_to(message, f'مشکلی رخ داده است لحظاتی بعد دوباره فایلتان را فروارد بکنید.'
-                                          f' درصورت رخ دادن مجدد مشکل با ادمین در تماس باشید')
+                bot.reply_to(message, ms)
         else:
             bot.reply_to(message, f'شما هم اکنون سه تا فایل در صف دانلود دارید. لطفا صبر کنید')
 
 
+@bot.message_handler(content_types=['document'])
+def document_validation(message):
+    id = message.document.file_id
+    chat_id = message.chat.id
+    # Todo tabligat ezafala
+    if message.document.file_size > 314572800:
+        bot.reply_to(message, 'فایل شما باید حجمش کمتر از 300 مگ باشد')
+    else:
+        # if users active downloads bigger than 3, its return the False
+        if not (ms := check_user_downloads(str(chat_id), id)):
+            try:
+                # get file list
+                Files = requests.get(url="http://127.0.0.1:8000/bot/Commends/files/")
+                # if file was downloaded, its return True
+                if file := was_it_linked(Files, id):
+                    bot.reply_to(message, f'لینک دانلود شما :\n {file["url"]}')
+                else:
+
+                    file_info = bot.get_file(id)
+                    data = {
+                        'chat_id': chat_id,
+                        'file_id': id,
+                        'file_name': message.document.file_name,
+                        'file_extension': mimetypes.guess_extension(message.document.mime_type),
+                        'file_path': file_info.file_path,
+                        'file_size': file_info.file_size / (1024 ** 2)
+                    }
+                    response = requests.post(url="http://127.0.0.1:8000/bot/Commends/add-to-download-list/", data=data)
+
+                    if response.status_code == "200":
+                        bot.reply_to(message, 'به لیست دانلود اضافه شد !!!')
+            except:
+                bot.reply_to(message, ms)
+        else:
+            bot.reply_to(message, f'شما هم اکنون سه تا فایل در صف دانلود دارید. لطفا صبر کنید')
 
 
+@bot.message_handler(content_types=['audio'])
+def audio_validation(message):
+    id = message.audio.file_id
+    chat_id = message.chat.id
+    # Todo tabligat ezafala
+    if message.document.file_size > 314572800:
+        bot.reply_to(message, 'فایل شما باید حجمش کمتر از 300 مگ باشد')
+    else:
+        # if users active downloads bigger than 3, its return the False
+        if not (ms := check_user_downloads(str(chat_id), id)):
+            try:
+                # get file list
+                Files = requests.get(url="http://127.0.0.1:8000/bot/Commends/files/")
+                # if file was downloaded, its return True
+                if file := was_it_linked(Files, id):
+                    bot.reply_to(message, f'لینک دانلود شما :\n {file["url"]}')
+                else:
 
+                    file_info = bot.get_file(id)
+                    data = {
+                        'chat_id': chat_id,
+                        'file_id': id,
+                        'file_name': message.audio.file_name,
+                        'file_extension': mimetypes.guess_extension(message.audio.mime_type),
+                        'file_path': file_info.file_path,
+                        'file_size': file_info.file_size / (1024 ** 2)
+                    }
+                    response = requests.post(url="http://127.0.0.1:8000/bot/Commends/add-to-download-list/", data=data)
+
+                    if response.status_code == "200":
+                        bot.reply_to(message, 'به لیست دانلود اضافه شد !!!')
+            except:
+                bot.reply_to(message, ms)
+        else:
+            bot.reply_to(message, f'شما هم اکنون سه تا فایل در صف دانلود دارید. لطفا صبر کنید')
 
 
 

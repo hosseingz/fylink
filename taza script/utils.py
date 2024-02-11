@@ -51,15 +51,20 @@ class Keyboard(types.ReplyKeyboardMarkup):
 
 
 # Todo test beshe
-def check_user_downloads(chat_id: str):
+def check_user_downloads(chat_id: str, file_id):
     download_list = requests.get('http://127.0.0.1:8000/bot/Commends/download-list/').json()
 
     count = list(filter(lambda i: i['chat_id'] == chat_id, download_list)).__len__()
     # that count display  users active downloads count
-    if count >= 3:
-        return False
+
+    if file_id in [item['file_id'] for item in download_list]:
+        message = 'این فایل هم اکنون در صف دانلود است, شما نمیتوانید دوباره فروارد بکنید'
+    elif count >= 3:
+        message = f'شما هم اکنون سه تا فایل در صف دانلود دارید. لطفا صبر کنید'
     else:
-        return True
+        message = ''
+
+    return message
 
 
 def was_it_linked(files, id):

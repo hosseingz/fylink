@@ -52,7 +52,7 @@ def new_user(request):
 
 @api_view(['GET'])
 def get_files(request):
-    query = File.objects.all()
+    query = File.objects.filter(is_active=True)
     serializer = FileSerializers(query, many=True)
     return Response(data=serializer.data, status=HTTP_200_OK)
 
