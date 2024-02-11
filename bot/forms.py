@@ -1,5 +1,5 @@
 from django import forms
-from .models import BotUser
+from .models import BotUser, File
 
 
 class NewUserForm(forms.ModelForm):
@@ -14,5 +14,20 @@ class NewUserForm(forms.ModelForm):
             raise forms.ValidationError("This user already exist")
 
         return chat_id
+
+
+class FileForm(forms.ModelForm):
+    chat_id = forms.CharField(max_length=250)
+
+    class Meta:
+        model = File
+        fields = ['file_id', 'file_name', 'file_extension', 'file_path', 'file_size']
+
+
+class CheckAttrForm(forms.forms):
+    chat_id = forms.CharField(max_length=250)
+    attr = forms.CharField(max_length=250)
+
+
 
 

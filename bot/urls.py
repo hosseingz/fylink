@@ -12,27 +12,14 @@ urlpatterns = [
     path('logout/', views.index, name='index'),
     # path('admin-panel/', views.admin_panel, name='admin_panel'),
 
-    # Models
-    # path('admin-panel/BotUser/', views.index, name='index'),
-    # path('admin-panel/Referra/', views.index, name='index'),
-    # path('admin-panel/Subscription/', views.index, name='index'),
-    # path('admin-panel/Address/', views.index, name='index'),
-    # path('admin-panel/Transaction/', views.index, name='index'),
-    # path('admin-panel/Hard/', views.index, name='index'),
-    # path('admin-panel/Report/DailyReport', views.index, name='index'),
-    # path('admin-panel/Report/MonthlyReport', views.index, name='index'),
 
-    # Commends from bot to server
+    # API
     path('Commends/new-user/', views.new_user, name='new_user'),
+    path('Commends/user-info/', views.user_info, name='user_info'),
+    path('Commends/files/', views.get_files, name='is_linked'),
+    path('Commends/download-list/', views.download_list, name='download_list'),
+    path('Commends/has-attr/', views.check_Subscription, name='check_Subscription'),
+    path('Commends/add-to-download-list/', views.add_download_list, name='add_download_list'),
 
-
-
-    # path('Commends/referral/', views.new_user, name='new_user'),
-    # path('Commends/Subscription/', views.new_user, name='new_user'),
-    # path('Commends/Address/', views.new_user, name='new_user'),
-    # path('Commends/Transaction/', views.new_user, name='new_user'),
-    # path('Commends/Hard/', views.new_user, name='new_user'),
-    # path('Commends/DailyReport/', views.new_user, name='new_user'),
-    # path('Commends/MonthlyReport/', views.new_user, name='new_user'),
 
 ]

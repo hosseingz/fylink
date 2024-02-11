@@ -1,5 +1,7 @@
 import datetime
 from telebot import types
+import requests
+
 from Conf import *
 # from googleapiclient.discovery import build
 # from google.oauth2 import service_account
@@ -48,17 +50,21 @@ class Keyboard(types.ReplyKeyboardMarkup):
             self.add(button)
 
 
-def check_available_drive(file_size):
-    for drive in active_Drives:
-        if drive.free_space - (file_size / (1024 ** 2)) > 100:
-            return drive
+# Todo test beshe
+def check_user_downloads(chat_id: str):
+    download_list = requests.get('http://127.0.0.1:8000/bot/Commends/download-list/').json()
 
-    return False
+    count = list(filter(lambda i: i['chat_id'] == chat_id, download_list)).__len__()
+    # that count display  users active downloads count
+    if count >= 3:
+        return False
+    else:
+        return True
 
 
-def was_it_linked(filesList, id):
-    for file in filesList:
-        if file.Tl_id == id:
+def was_it_linked(files, id):
+    for file in files:
+        if file['file_id'] == id:
             return file
     return False
 
@@ -75,22 +81,6 @@ def add_to_queue(request, request_queue, bot):
         bot.reply_to(message, 'درحال پردازش هست')
 
 
-def check_user_requests(chat_id, user_requests: dict, bot):
-    request_count = user_requests.get(chat_id, 0)
-
-    max_requests = 3
-
-    if request_count >= max_requests:
-        bot.send_message(chat_id, 'در هر 5 دق مجاز به فرستادن 3 فایل هستید !!!')
-        return False
-
-    else:
-        user_requests[chat_id] = request_count + 1
-        return True
-
-
-def reset_user_requests(user_requests:dict):
-    user_requests.clear()
 
 
 #####################################################

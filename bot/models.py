@@ -13,7 +13,7 @@ class BotUser(models.Model):
     wallet = models.PositiveIntegerField(default=0)
 
     start_time = models.DateTimeField(auto_now_add=True)
-    language = None
+    # language = None
 
     def __str__(self):
         return f'{self.chat_id}'
@@ -108,13 +108,32 @@ class DailyReport(models.Model):
     traffic = models.PositiveIntegerField(default=0)
 
 
-class Tickets(models.Model):
-    report = models.ForeignKey(DailyReport, on_delete=models.CASCADE, related_name='tickets')
-    user = models.ForeignKey(BotUser, on_delete=models.CASCADE, related_name='tickets')
-    message = models.TextField()
+# class Tickets(models.Model):
+#     report = models.ForeignKey(DailyReport, on_delete=models.CASCADE, related_name='tickets')
+#     user = models.ForeignKey(BotUser, on_delete=models.CASCADE, related_name='tickets')
+#     message = models.TextField()
 
 
 class MonthlyReport(models.Model):
     month = models.DateField()
     new_users = models.PositiveIntegerField(default=0)
     traffic = models.PositiveIntegerField(default=0)
+
+
+class File(models.Model):
+    file_id = models.CharField(max_length=250)
+    file_name = models.CharField(max_length=250)
+    file_extension = models.CharField(max_length=5)
+    file_path = models.TextField()
+    file_size = models.PositiveIntegerField()
+    url = models.TextField(blank=True, null=True)
+    date = models.DateTimeField(default=timezone.now)
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.file_name}{self.file_extension}"
+
+
+class DownloadList(models.Model):
+    chat_id = models.CharField(max_length=250)
+    file = models.ForeignKey(File, on_delete=models.CASCADE)

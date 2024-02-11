@@ -62,3 +62,14 @@ class MonthlyReportAdmin(admin.ModelAdmin):
     list_per_page = 12
     search_fields = ['month']
     date_hierarchy = 'month'
+
+
+@admin.register(File)
+class FileAdmin(admin.ModelAdmin):
+    list_display = ['file_id', 'file_name', 'file_size', 'is_active']
+
+
+@admin.register(DownloadList)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['chat_id', 'file']
+
