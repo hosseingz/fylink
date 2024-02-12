@@ -136,4 +136,4 @@ class File(models.Model):
 
 class DownloadList(models.Model):
     chat_id = models.CharField(max_length=250)
-    file = models.ForeignKey(File, on_delete=models.CASCADE)
+    file = models.OneToOneField(File, on_delete=models.CASCADE)

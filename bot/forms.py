@@ -24,7 +24,7 @@ class FileForm(forms.ModelForm):
         fields = ['file_id', 'file_name', 'file_extension', 'file_path', 'file_size']
 
 
-class CheckAttrForm(forms.forms):
+class CheckAttrForm(forms.Form):
     chat_id = forms.CharField(max_length=250)
     attr = forms.CharField(max_length=250)
 

@@ -151,24 +151,24 @@ def audio_validation(message):
             bot.reply_to(message, f'شما هم اکنون سه تا فایل در صف دانلود دارید. لطفا صبر کنید')
 
 
+def download_process():
+    while True:
+        List = requests.post('http://127.0.0.1:8000/bot/Commends/download-list/').json()
+
+        if len(List) > 0:
+            try:
+                turn = requests.post('http://127.0.0.1:8000/bot/Commends/whose-turn-is-it/').json()
+
+            except:
+                pass
+
+
+
+        else:
+            time.sleep(1)
 
 
 
 
-
-# message = request.message
-#
-# file = message.document if message.document else \
-#     message.video if message.video else message.audio if message.audio else None
-#
-# file_id = file.file_id
-# file_info = bot.get_file(file_id)
-# file_path = file_info.file_path
-# file_name = file_path.rsplit('/')[-1]
-# file_size = file_info.file_size
-# file_extension = mimetypes.guess_extension(file.mime_type)
-#
-# download_url = f"https://api.telegram.org/file/bot{bot.token}/{file_path}"
-# response = requests.get(download_url)
 
 

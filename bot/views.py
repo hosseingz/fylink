@@ -64,7 +64,7 @@ def user_info(request):
     return Response(data=serializer.data, status=HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def download_list(request):
     List = DownloadList.objects.all()
     serializer = DownloadListSerializers(List, many=True)
@@ -73,9 +73,9 @@ def download_list(request):
 
 @api_view(['POST'])
 def check_Subscription(request):
-    
+
     form = CheckAttrForm(request.Post)
-            
+
     if form.is_valid:
         cd = form.cleaned_data
         user = BotUser.objects.get(chat_id=cd['chat_id'])
@@ -97,3 +97,11 @@ def add_download_list(request):
 
         return Response(status=HTTP_200_OK)
     return Response(status=HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def whose_turn_is_it(request):
+    obj = DownloadList.objects.first()
+    serializer = DownloadListSerializers(obj)
+    serializer.update_file(FileSerializers(obj.file))
+    return Response(data=serializer.data, status=HTTP_200_OK)
