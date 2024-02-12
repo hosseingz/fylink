@@ -49,7 +49,7 @@ def video_validation(message):
         bot.reply_to(message, 'فایل شما باید حجمش کمتر از 300 مگ باشد')
     else:
         # if users active downloads bigger than 3, its return the False
-        if not (ms := check_user_downloads(str(chat_id), id)):
+        if not (ms := check_user_downloads(str(chat_id), str(str))):
             try:
                 # get file list
                 Files = requests.get(url="http://127.0.0.1:8000/bot/Commends/files/")

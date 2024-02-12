@@ -31,56 +31,55 @@ def index(request):
     return HttpResponse("salam amu")
 
 
-# Commends
+@api_view(['POST'])
 def new_user(request):
     # Todo add 1 to daily report
-    form = NewUserForm(request.GET)
-    data = {'status': 204}  # None Content
+    form = NewUserForm(request.POST)
+    status = HTTP_400_BAD_REQUEST  # None Content
+    
     if form.is_valid():
         form.save()
-        data = {
-            'status': 200  # New User Saved !
-        }
+        status =  HTTP_200_OK
         today = check_date(DailyReport.objects.last().date, 1, DailyReport)
         today.new_users += 1
         today.save()
 
-    data = json.dumps(data)
 
-    return HttpResponse(data)
+    return Response(status=status)
 
 
-@api_view(['GET'])
-def get_files(request):
+@api_view(['POST'])
+def files(request):
     query = File.objects.filter(is_active=True)
     serializer = FileSerializers(query, many=True)
     return Response(data=serializer.data, status=HTTP_200_OK)
 
 
-@api_view(['GET'])
-def user_info(request):
-    user = BotUser.objects.get(chat_id=request.GET.get('chat_id'))
-    serializer = UserSerializers(user)
-    return Response(data=serializer.data, status=HTTP_200_OK)
-
-
 @api_view(['POST'])
 def download_list(request):
-    List = DownloadList.objects.all()
-    serializer = DownloadListSerializers(List, many=True)
+
+    # Todo bijur update elaki filin tamam etelagatin geyrarsin
+    objects = DownloadList.objects.all()
+    serializer = DownloadListSerializers(objects, many=True)
+
+    for i, item in enumerate(serializer.data):
+        item.update({'file': FileSerializers(objects[i].file).data})
+
     return Response(data=serializer.data, status=HTTP_200_OK)
 
 
 @api_view(['POST'])
 def check_Subscription(request):
 
-    form = CheckAttrForm(request.Post)
+    form = CheckAttrForm(request.POST)
 
-    if form.is_valid:
+    if form.is_valid():
         cd = form.cleaned_data
         user = BotUser.objects.get(chat_id=cd['chat_id'])
+        print(user.__dict__)
+
         if hasattr(user, cd['attr']):
-            sub_obj = Subscription.objects.get(chat_id=cd['chat_id'])
+            sub_obj = Subscription.objects.get(user=user)
             serializer = SubscriptionsSerializers(sub_obj)
             return Response(data=serializer.data, status=HTTP_200_OK)
         else:

@@ -5,7 +5,7 @@ from .models import *
 class UserSerializers(serializers.ModelSerializer):
     class Meta:
         model = BotUser
-        fields = ['subscription']
+        fields = ['chat_id', 'traffic', 'wallet']
 
 
 class FileSerializers(serializers.ModelSerializer):

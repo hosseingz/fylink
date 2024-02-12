@@ -18,9 +18,9 @@ urlpatterns = [
 
     path('Commends/new-user/', views.new_user, name='new_user'),
     path('Commends/user-info/', views.user_info, name='user_info'),
-    path('Commends/files/', views.get_files, name='is_linked'),
+    path('Commends/files/', views.files, name='files'),
     path('Commends/download-list/', views.download_list, name='download_list'),
-    path('Commends/has-attr/', views.check_Subscription, name='check_Subscription'),
+    path('Commends/check_Subscription/', views.check_Subscription, name='check_Subscription'),
     path('Commends/add-to-download-list/', views.add_download_list, name='add_download_list'),
 
     path('Commends/whose-turn-is-it/', views.whose_turn_is_it, name='whose_turn_is_it'),
